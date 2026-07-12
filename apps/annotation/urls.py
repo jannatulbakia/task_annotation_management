@@ -5,6 +5,7 @@ from .views import (
     ImageDetailView,
     PolygonListCreateView,
     PolygonDetailView,
+    DebugStorageView,
 )
 
 urlpatterns = [
@@ -27,6 +28,11 @@ urlpatterns = [
     path(
         "polygons/<int:pk>/",
         PolygonDetailView.as_view(),
+    ),
+    
+    path(
+    "debug-storage/",
+    DebugStorageView.as_view(),
     ),
 
 ]
