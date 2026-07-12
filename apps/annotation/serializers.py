@@ -15,8 +15,6 @@ class UploadedImageSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
-    image = serializers.SerializerMethodField()
-
     class Meta:
         model = UploadedImage
         fields = "__all__"
@@ -25,16 +23,13 @@ class UploadedImageSerializer(serializers.ModelSerializer):
             "uploaded_at",
         )
 
-    def get_image(self, obj):
-        if not obj.image:
-            return None
-
-        url = obj.image.url
-        if url.startswith(("http://", "https://")):
-            return url
-
-        request = self.context.get("request")
-        if request:
-            return request.build_absolute_uri(url)
-
-        return url
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if instance.image:
+            url = instance.image.url
+            if not url.startswith(("http://", "https://")):
+                request = self.context.get("request")
+                if request:
+                    url = request.build_absolute_uri(url)
+            data["image"] = url
+        return data
