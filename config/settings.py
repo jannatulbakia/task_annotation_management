@@ -73,6 +73,8 @@ STATICFILES_STORAGE = STORAGES["staticfiles"]["BACKEND"]
 
 ROOT_URLCONF = "config.urls"
 
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
