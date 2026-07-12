@@ -69,6 +69,8 @@ STORAGES = {
     },
 }
 
+STATICFILES_STORAGE = STORAGES["staticfiles"]["BACKEND"]
+
 ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
