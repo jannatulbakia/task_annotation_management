@@ -184,10 +184,7 @@ if CLOUDINARY_CLOUD_NAME:
 
 CORS_ALLOWED_ORIGINS = [
     origin.strip()
-    for origin in config(
-        "CORS_ALLOWED_ORIGINS",
-        default="http://localhost:3000,http://localhost:3001",
-    ).split(",")
+    for origin in config("CORS_ALLOWED_ORIGINS").split(",")
     if origin.strip()
 ]
 
@@ -195,10 +192,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
-    for origin in config(
-        "CSRF_TRUSTED_ORIGINS",
-        default="http://localhost:3000,http://localhost:3001",
-    ).split(",")
+    for origin in config("CSRF_TRUSTED_ORIGINS").split(",")
     if origin.strip()
 ]
 
