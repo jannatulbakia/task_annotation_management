@@ -69,6 +69,9 @@ STORAGES = {
     },
 }
 
+# django-cloudinary-storage still reads this removed Django setting during collectstatic.
+STATICFILES_STORAGE = STORAGES["staticfiles"]["BACKEND"]
+
 ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
