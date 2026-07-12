@@ -26,15 +26,15 @@ class UploadedImageSerializer(serializers.ModelSerializer):
         )
 
     def get_image(self, obj):
-        try:
-            request = self.context.get("request")
-
-            if obj.image:
-                if request:
-                    return request.build_absolute_uri(obj.image.url)
-                return obj.image.url
-
+        if not obj.image:
             return None
 
-        except Exception as e:
-            return str(e)
+        url = obj.image.url
+        if url.startswith(("http://", "https://")):
+            return url
+
+        request = self.context.get("request")
+        if request:
+            return request.build_absolute_uri(url)
+
+        return url

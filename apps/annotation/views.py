@@ -1,4 +1,7 @@
+import mimetypes
+
 from django.conf import settings
+from django.http import FileResponse, Http404, HttpResponseRedirect
 
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
@@ -35,6 +38,36 @@ class ImageDetailView(generics.RetrieveDestroyAPIView):
     def get_queryset(self):
         return UploadedImage.objects.filter(
             user=self.request.user
+        )
+
+
+class ImageFileView(APIView):
+    """Stream the raw image file for an uploaded image (authenticated)."""
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        try:
+            image_obj = UploadedImage.objects.get(pk=pk, user=request.user)
+        except UploadedImage.DoesNotExist as exc:
+            raise Http404("Image not found.") from exc
+
+        if not image_obj.image:
+            raise Http404("Image file not found.")
+
+        image_url = image_obj.image.url
+        if image_url.startswith(("http://", "https://")):
+            return HttpResponseRedirect(image_url)
+
+        try:
+            file_handle = image_obj.image.open("rb")
+        except FileNotFoundError as exc:
+            raise Http404("Image file missing on server.") from exc
+
+        content_type, _ = mimetypes.guess_type(image_obj.image.name)
+        return FileResponse(
+            file_handle,
+            content_type=content_type or "application/octet-stream",
         )
 
 

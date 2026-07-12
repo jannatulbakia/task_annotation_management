@@ -3,6 +3,7 @@ from django.urls import path
 from .views import (
     ImageListCreateView,
     ImageDetailView,
+    ImageFileView,
     PolygonListCreateView,
     PolygonDetailView,
     DebugStorageView,
@@ -18,6 +19,11 @@ urlpatterns = [
     path(
         "images/<int:pk>/",
         ImageDetailView.as_view(),
+    ),
+
+    path(
+        "images/<int:pk>/file/",
+        ImageFileView.as_view(),
     ),
 
     path(
