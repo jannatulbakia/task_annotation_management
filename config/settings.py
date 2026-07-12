@@ -65,12 +65,9 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.StaticFilesStorage",
     },
 }
-
-# django-cloudinary-storage still reads this removed Django setting during collectstatic.
-STATICFILES_STORAGE = STORAGES["staticfiles"]["BACKEND"]
 
 ROOT_URLCONF = "config.urls"
 
