@@ -3,7 +3,6 @@ from .models import UploadedImage, Polygon
 
 
 class PolygonSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Polygon
         fields = "__all__"
@@ -27,9 +26,15 @@ class UploadedImageSerializer(serializers.ModelSerializer):
         )
 
     def get_image(self, obj):
-        request = self.context.get("request")
+        try:
+            request = self.context.get("request")
 
-        if request:
-            return request.build_absolute_uri(obj.image.url)
+            if obj.image:
+                if request:
+                    return request.build_absolute_uri(obj.image.url)
+                return obj.image.url
 
-        return obj.image.url
+            return None
+
+        except Exception as e:
+            return str(e)
